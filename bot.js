@@ -182,6 +182,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     interaction.fields.getTextInputValue("descriptionInput") || null;
 
   const emptyParticipants = [{ name: "Personne !", value: "Oh non..." }];
+  
   // Créer l'embed de la session
   const gameEmbed = createGameEmbed(gameName, date, hour, mod, description, emptyParticipants);
 
