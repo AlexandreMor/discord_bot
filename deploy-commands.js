@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const token = process.env.DISCORD_TOKEN;
 const clientId = process.env.CLIENT_ID;
-const guildId = process.env.GUILD_ID;
+const guildId = process.env.GUILD_ID_PROD;
 
 const commands = [];
 

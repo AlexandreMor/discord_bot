@@ -60,7 +60,8 @@ const createGameEmbed = (
   hour,
   mod,
   description,
-  participants
+  participants,
+  participantsField 
 ) => {
   return new EmbedBuilder()
     .setColor(0x0099ff)
@@ -72,10 +73,10 @@ const createGameEmbed = (
       { name: "Heure", value: hour, inline: true },
       { name: "Mod", value: mod },
       {
-        name: "----------------------------------------------",
+        name: "-----------------------------------------------",
         value: "\u200B",
       },
-      { name: "Participants", value: "\u200B" }
+      participantsField 
     )
     .addFields(participants)
     .setTimestamp()
@@ -182,9 +183,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
     interaction.fields.getTextInputValue("descriptionInput") || null;
 
   const emptyParticipants = [{ name: "Personne !", value: "Oh non..." }];
+
+  const participantsField = { name: `Participants :`, value: "\u200B" }
   
   // Créer l'embed de la session
-  const gameEmbed = createGameEmbed(gameName, date, hour, mod, description, emptyParticipants);
+  const gameEmbed = createGameEmbed(gameName, date, hour, mod, description, emptyParticipants,participantsField );
 
   const row = createButtons();
 
@@ -205,7 +208,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isButton()) return;
 
   await interaction.reply({
-    content: "Bouton cliqué !",
+    content: "Enregistré !",
   });
 
   await interaction.deleteReply();
@@ -246,6 +249,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     (field) => (field.name = "Mod")
   ).value;
   const description = interaction.message.embeds[0].data.description;
+  const participantsField = { name: `Participants (${participants.length}) :`, value: "\u200B" }
 
   // Mettre à jour l'embed de la session avec les nouveaux participants
   const newGameEmbed = createGameEmbed(
@@ -254,12 +258,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
     hour,
     mod,
     description,
-    participantsEmbedList
+    participantsEmbedList,
+    participantsField
   );
 
   const row = createButtons();
-  console.log(participants);
-  console.log(participantsEmbedList);
 
   interaction.message.edit({
     embeds: [newGameEmbed],
